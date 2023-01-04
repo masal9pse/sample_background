@@ -54,19 +54,12 @@ class _MyAppState extends State<MyApp> {
     int status = await BackgroundFetch.configure(
         BackgroundFetchConfig(
           minimumFetchInterval: 15,
-          // stopOnTerminate: false,
-          // enableHeadless: true,
-          // requiresBatteryNotLow: false,
-          // requiresCharging: false,
-          // requiresStorageNotLow: false,
-          // requiresDeviceIdle: false,
-          // requiredNetworkType: NetworkType.NONE
         ), (String taskId) async {
-      // <-- Event handler
       // This is the fetch-event callback.
       print("[BackgroundFetch] Event received $taskId");
       setState(() {
-        _events.insert(0, new DateTime.now());
+        // _events.insert(0, new DateTime.now());
+        _events.add(DateTime.now());
         print(_events);
       });
       // IMPORTANT:  You must signal completion of your task or the OS can punish your app
@@ -75,17 +68,27 @@ class _MyAppState extends State<MyApp> {
     }, (String taskId) async {
       // <-- Task timeout handler.
       // This task has exceeded its allowed running-time.  You must stop what you're doing and immediately .finish(taskId)
-      print("[BackgroundFetch] TASK TIMEOUT taskId２: $taskId");
-      BackgroundFetch.finish(taskId);
-    });
-    print('[BackgroundFetch] configure success: $status');
+      print("[BackgroundFetch] TASK TIMEOUT taskId: $taskId");
+      print('[BackgroundFetch] configure success: $status');
     setState(() {
       _status = status;
     });
     setState(() {
-      _events.insert(0, new DateTime.now());
+      // _events.insert(0, new DateTime.now());
+      _events.add(DateTime.now());
       print(_events);
     });
+      BackgroundFetch.finish(taskId);
+    });
+    // print('[BackgroundFetch] configure success: $status');
+    // setState(() {
+    //   _status = status;
+    // });
+    // setState(() {
+    //   // _events.insert(0, new DateTime.now());
+    //   _events.add(DateTime.now());
+    //   print(_events);
+    // });
 
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
@@ -96,6 +99,7 @@ class _MyAppState extends State<MyApp> {
   void _onClickEnable(enabled) {
     setState(() {
       _enabled = enabled;
+      print(_enabled);
     });
     if (enabled) {
       BackgroundFetch.start().then((int status) {
@@ -115,6 +119,11 @@ class _MyAppState extends State<MyApp> {
     print('[BackgroundFetch] status: $status');
     setState(() {
       _status = status;
+    });
+    setState(() {
+      // _events.insert(0, new DateTime.now());
+      _events.add(DateTime.now());
+      print(_events);
     });
   }
 
